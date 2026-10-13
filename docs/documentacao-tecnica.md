@@ -169,6 +169,83 @@ A análise de normalização indica que a estrutura proposta atende à 1FN, 2FN 
 
 O modelo servirá como base para a implementação física em um SGBD relacional durante a APD3.
 
-**APD3:** implementação física do banco de dados, inserção de registros e desenvolvimento de consultas SQL.
+## APD3 — Implementação Física do Banco de Dados
+
+### 1. Objetivo
+
+A terceira etapa do Projeto Integrador teve como objetivo implementar fisicamente a base de dados relacional desenvolvida nas etapas anteriores, utilizando um Sistema Gerenciador de Banco de Dados (SGBD).
+
+### 2. Tecnologias utilizadas
+
+Foi utilizado o PostgreSQL, disponibilizado pela plataforma Supabase, para criação e gerenciamento das tabelas e execução dos comandos SQL.
+
+O Visual Studio Code foi utilizado para organizar os scripts e a documentação, enquanto o GitHub foi utilizado para versionamento dos arquivos do projeto.
+
+### 3. Implementação das tabelas
+
+Foram criadas quatro tabelas relacionadas:
+
+- USUARIO: armazena os dados dos usuários responsáveis pelos registros.
+- CATEGORIA: armazena as classificações dos objetos.
+- LOCAL: armazena os locais de ocorrência.
+- OBJETO: armazena os objetos perdidos ou encontrados.
+
+As tabelas possuem chaves primárias e relacionamentos definidos por chaves estrangeiras, garantindo a integridade referencial.
+
+Também foram utilizadas restrições como NOT NULL, UNIQUE e CHECK para melhorar a consistência dos dados.
+
+O script de criação está disponível em `database/01_create_tables.sql`.
+
+### 4. Inserção de dados
+
+Foram inseridos registros fictícios nas quatro tabelas para permitir a execução de testes e consultas.
+
+Os dados incluem usuários, categorias, locais e objetos com diferentes situações, como PERDIDO, ENCONTRADO e DEVOLVIDO.
+
+O script está disponível em `database/02_insert_data.sql`.
+
+### 5. Consultas SQL
+
+Foram elaboradas consultas para demonstrar a manipulação e recuperação de informações armazenadas no banco.
+
+Entre os recursos utilizados estão:
+
+- SELECT e WHERE para consultas e filtros;
+- ORDER BY para ordenação;
+- INNER JOIN para relacionar registros;
+- LEFT JOIN para incluir registros sem correspondência;
+- GROUP BY e COUNT para agrupamento e contagem;
+- Subconsultas com IN, EXISTS e comparação de valores.
+
+As consultas estão organizadas em `database/03_queries.sql`.
+
+### 6. Evidências de execução
+
+Foram registradas capturas de tela dos resultados das consultas no SQL Editor do Supabase.
+
+**Consulta 5 — Relacionamento entre objetos, categorias e locais**
+
+![Consulta 5](APD3/evidencias/consulta5.png)
+
+**Consulta 6 — Quantidade de objetos por categoria**
+
+![Consulta 6](APD3/evidencias/consulta6.png)
+
+**Consulta 8 — Subconsulta para objetos da Biblioteca**
+
+![Consulta 8](APD3/evidencias/consulta8.png)
+
+### 7. Resultados
+
+A execução das consultas permitiu verificar a recuperação de informações de diferentes tabelas, demonstrando o funcionamento dos relacionamentos estabelecidos no modelo lógico.
+
+Os resultados também demonstraram a possibilidade de realizar filtros, agrupamentos e subconsultas utilizando SQL.
+
+### 8. Conclusão
+
+A implementação física do banco de dados permitiu transformar o modelo lógico em uma estrutura funcional no PostgreSQL.
+
+As tabelas, os relacionamentos e as consultas desenvolvidas constituem a base para a próxima etapa do projeto, que será a integração com uma aplicação web contendo funcionalidades CRUD.
+
 
 **APD4:** desenvolvimento de um MVP web integrado ao banco de dados, com funcionalidades CRUD e consultas.
