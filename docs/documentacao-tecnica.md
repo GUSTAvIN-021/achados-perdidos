@@ -110,9 +110,64 @@ A utilização de identificadores únicos facilita a identificação dos registr
 - HTML, CSS e JavaScript: desenvolvimento previsto da interface web.
 - Git e GitHub: versionamento dos arquivos e documentação.
 
-### 9. Próximas etapas
 
-**APD2:** elaboração do modelo lógico relacional e aplicação das regras de normalização.
+
+## APD2 — Modelo Lógico e Normalização
+
+### 1. Modelo lógico relacional
+
+O modelo lógico foi elaborado utilizando o software brModelo, a partir do Modelo Entidade-Relacionamento desenvolvido na APD1.
+
+O banco de dados é composto por quatro tabelas: USUARIO, CATEGORIA, LOCAL e OBJETO.
+
+A tabela OBJETO representa a entidade central do sistema e contém três chaves estrangeiras responsáveis por estabelecer os relacionamentos com as demais tabelas.
+
+**Esquema relacional:**
+
+- USUARIO(id_usuario PK, nome, email, matricula, telefone)
+- CATEGORIA(id_categoria PK, nome, descricao)
+- LOCAL(id_local PK, nome, bloco, descricao)
+- OBJETO(id_objeto PK, nome, descricao, data_ocorrencia, status, id_usuario FK, id_categoria FK, id_local FK)
+
+### 2. Primeira Forma Normal (1FN)
+
+A Primeira Forma Normal determina que cada atributo deve armazenar valores atômicos, evitando grupos repetitivos ou múltiplos valores em um mesmo campo.
+
+No modelo proposto, os atributos foram definidos para armazenar valores individuais. Por exemplo, cada objeto possui um único nome, uma data de ocorrência e um status.
+
+Dessa forma, considerando o preenchimento atômico dos campos, o modelo atende à 1FN.
+
+### 3. Segunda Forma Normal (2FN)
+
+A Segunda Forma Normal exige que o modelo esteja na 1FN e que os atributos não-chave não dependam apenas de parte de uma chave candidata composta.
+
+As quatro tabelas possuem chaves primárias simples, formadas por um único identificador.
+
+Considerando também que não foram definidas outras chaves candidatas compostas com dependências parciais, o modelo atende à 2FN.
+
+### 4. Terceira Forma Normal (3FN)
+
+A Terceira Forma Normal busca eliminar dependências transitivas indevidas entre atributos.
+
+No modelo desenvolvido, os dados dos usuários, categorias e locais foram organizados em tabelas específicas, evitando sua repetição na tabela OBJETO.
+
+Assim, as informações descritivas dessas entidades permanecem relacionadas aos seus respectivos identificadores.
+
+Considerando as dependências funcionais previstas nas regras de negócio, não foram identificadas dependências transitivas que violem a 3FN.
+
+### 5. Justificativa da normalização
+
+A organização da base de dados busca reduzir a redundância, melhorar a consistência das informações e evitar anomalias de inserção, atualização e exclusão.
+
+A separação das entidades também facilita a manutenção do banco e a implementação de consultas SQL utilizando relacionamentos entre tabelas.
+
+### 6. Conclusão da APD2
+
+A transformação do MER para o modelo lógico permitiu definir as tabelas, chaves primárias, chaves estrangeiras e relacionamentos necessários ao sistema.
+
+A análise de normalização indica que a estrutura proposta atende à 1FN, 2FN e 3FN, considerando as regras de negócio estabelecidas.
+
+O modelo servirá como base para a implementação física em um SGBD relacional durante a APD3.
 
 **APD3:** implementação física do banco de dados, inserção de registros e desenvolvimento de consultas SQL.
 
