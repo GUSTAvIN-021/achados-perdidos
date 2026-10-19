@@ -1,10 +1,9 @@
 # Projeto Integrador de Banco de Dados I
+
 ## APD1 — Modelagem Conceitual
 
-**Projeto:** Sistema Web de Achados e Perdidos para Ambiente Acadêmico
-
-**Curso:** Bacharelado em Engenharia da Computação
-
+**Projeto:** Sistema Web de Achados e Perdidos para Ambiente Acadêmico  
+**Curso:** Bacharelado em Engenharia da Computação  
 **Disciplina:** Banco de Dados I
 
 **Integrantes:**
@@ -13,239 +12,161 @@
 
 ### 1. Contextualização
 
-Em instituições de ensino, é comum que alunos, professores e funcionários percam ou encontrem objetos pessoais em salas de aula, laboratórios, bibliotecas e demais espaços.
+Em instituições de ensino, alunos, professores e funcionários podem perder ou encontrar objetos em salas de aula, laboratórios, bibliotecas e demais espaços. A divulgação informal dificulta localizar os responsáveis e acompanhar a devolução dos itens.
 
-A divulgação desses objetos geralmente ocorre de maneira informal, dificultando sua identificação e devolução.
-
-O Sistema Web de Achados e Perdidos tem como proposta centralizar essas informações, proporcionando maior organização e facilidade na consulta dos registros.
+O Sistema Web de Achados e Perdidos propõe centralizar os registros de objetos, usuários responsáveis pelos registros e locais de ocorrência.
 
 ### 2. Objetivo
 
-Desenvolver uma base de dados relacional para gerenciar objetos perdidos e encontrados no ambiente acadêmico.
-
-O sistema permitirá registrar informações sobre os objetos, seus responsáveis, categorias e locais de ocorrência.
-
-Posteriormente, a base de dados será integrada a uma aplicação web com funcionalidades CRUD e consultas.
+Estruturar uma base de dados relacional para organizar objetos perdidos e encontrados no ambiente acadêmico e, posteriormente, integrá-la a uma aplicação web com operações CRUD e consultas.
 
 ### 3. Requisitos funcionais
 
-- RF01 — Cadastrar usuários.
-- RF02 — Cadastrar categorias de objetos.
-- RF03 — Cadastrar locais da instituição.
-- RF04 — Cadastrar objetos perdidos ou encontrados.
-- RF05 — Consultar objetos cadastrados.
-- RF06 — Editar informações dos objetos.
-- RF07 — Excluir registros de objetos.
-- RF08 — Pesquisar objetos por nome, categoria, local e status.
-- RF09 — Atualizar o status dos objetos para perdido, encontrado ou devolvido.
+- **RF01:** Cadastrar usuários.
+- **RF02:** Cadastrar locais da instituição.
+- **RF03:** Cadastrar objetos perdidos ou encontrados, vinculando-os a um usuário e a um local.
+- **RF04:** Consultar os objetos cadastrados.
+- **RF05:** Editar os dados dos objetos.
+- **RF06:** Excluir registros de objetos.
+- **RF07:** Pesquisar objetos por nome, local ou status.
+- **RF08:** Alterar o status dos objetos entre PERDIDO, ENCONTRADO e DEVOLVIDO.
 
 ### 4. Regras de negócio
 
-- RN01 — Cada usuário possui um identificador único.
-- RN02 — Um usuário pode registrar vários objetos.
-- RN03 — Cada objeto deve estar associado a exatamente um usuário.
-- RN04 — Cada objeto pertence a uma única categoria.
-- RN05 — Uma categoria pode classificar vários objetos.
-- RN06 — Cada objeto deve estar associado a um local.
-- RN07 — Um local pode estar associado a vários objetos.
-- RN08 — Cada objeto possui um status que indica sua situação atual.
-- RN09 — O e-mail e a matrícula dos usuários, quando informada, devem ser únicos.
+- **RN01:** Cada usuário, local e objeto possui um identificador único.
+- **RN02:** Cada objeto possui um usuário responsável pelo registro.
+- **RN03:** Um usuário pode registrar vários objetos.
+- **RN04:** Cada objeto está associado a um local da instituição.
+- **RN05:** Um local pode estar associado a vários objetos.
+- **RN06:** Cada objeto possui um status: PERDIDO, ENCONTRADO ou DEVOLVIDO.
+- **RN07:** O e-mail do usuário deve ser único; a matrícula, quando informada, também deve ser única.
 
 ### 5. Modelo Entidade-Relacionamento (MER)
 
-O modelo conceitual foi desenvolvido utilizando o software brModelo.
+O modelo conceitual foi desenvolvido no brModelo e, após a revisão orientada pelo professor, contém três entidades:
 
-Foram definidas quatro entidades principais:
+- **USUARIO:** `id_usuario` (identificador), `nome`, `email`, `matricula`, `telefone`.
+- **LOCAL:** `id_local` (identificador), `nome`, `bloco`, `descricao`.
+- **OBJETO:** `id_objeto` (identificador), `nome`, `descricao`, `data_ocorrencia`, `status`.
 
-**USUARIO:** armazena informações dos responsáveis pelos registros.
-
-Atributos: id_usuario (identificador), nome, email, matricula e telefone.
-
-**OBJETO:** armazena as informações dos objetos perdidos ou encontrados.
-
-Atributos: id_objeto (identificador), nome, descricao, data_ocorrencia e status.
-
-**CATEGORIA:** representa a classificação dos objetos.
-
-Atributos: id_categoria (identificador), nome e descricao.
-
-**LOCAL:** representa os espaços físicos da instituição.
-
-Atributos: id_local (identificador), nome, bloco e descricao.
+![MER conceitual corrigido](APD1/MER_Achados_e_Perdidos.png)
 
 ### 6. Relacionamentos e cardinalidades
 
-**USUARIO — REGISTRA — OBJETO**
+- **USUARIO — REGISTRA — OBJETO:** o sistema associa o registro de cada objeto a um usuário.
+- **LOCAL — ACHADO — OBJETO:** o sistema associa cada objeto ao local da ocorrência.
 
-Um usuário pode registrar zero ou vários objetos. Cada objeto deve possuir exatamente um usuário responsável.
-
-Cardinalidade: 1:N.
-
-**CATEGORIA — CLASSIFICA — OBJETO**
-
-Uma categoria pode classificar zero ou vários objetos. Cada objeto deve pertencer a exatamente uma categoria.
-
-Cardinalidade: 1:N.
-
-**LOCAL — OCORRE — OBJETO**
-
-Um local pode estar associado a zero ou vários registros de objetos. Cada objeto deve estar associado a exatamente um local.
-
-Cardinalidade: 1:N.
+As cardinalidades e sua representação gráfica devem ser conferidas no arquivo editável do MER aprovado em sala. Na implementação relacional adotada, cada objeto referencia um usuário e um local, e um usuário ou local pode estar associado a vários objetos.
 
 ### 7. Justificativa da modelagem
 
-A entidade OBJETO foi definida como elemento central do sistema, pois representa as ocorrências que serão registradas.
+A entidade OBJETO representa os registros centrais da solução. USUARIO e LOCAL foram modeladas separadamente para evitar a repetição de informações de responsáveis e espaços físicos em cada objeto. A entidade CATEGORIA e seu relacionamento foram retirados conforme a revisão do modelo solicitada pelo professor.
 
-As entidades USUARIO, CATEGORIA e LOCAL foram separadas para organizar as informações e evitar a repetição desnecessária de dados.
+### 8. Tecnologias
 
-Essa estrutura permite que um mesmo usuário registre diferentes objetos, que vários objetos compartilhem uma categoria e que um mesmo local esteja associado a diversas ocorrências.
+- **brModelo:** modelagem conceitual e lógica.
+- **PostgreSQL / Supabase:** implementação e consultas ao banco de dados.
+- **Visual Studio Code:** edição dos arquivos do projeto.
+- **Git e GitHub:** versionamento dos artefatos.
+- **HTML, CSS e JavaScript:** tecnologias previstas para o MVP web.
 
-A utilização de identificadores únicos facilita a identificação dos registros e prepara a base para o desenvolvimento do modelo lógico e a aplicação das regras de normalização nas próximas etapas.
-
-### 8. Tecnologias previstas
-
-- brModelo: elaboração dos modelos conceitual e lógico.
-- PostgreSQL/Supabase: implementação futura do banco de dados relacional.
-- HTML, CSS e JavaScript: desenvolvimento previsto da interface web.
-- Git e GitHub: versionamento dos arquivos e documentação.
-
-
+---
 
 ## APD2 — Modelo Lógico e Normalização
 
 ### 1. Modelo lógico relacional
 
-O modelo lógico foi elaborado utilizando o software brModelo, a partir do Modelo Entidade-Relacionamento desenvolvido na APD1.
+O modelo lógico foi elaborado a partir do MER corrigido. Ele contém três tabelas relacionadas:
 
-O banco de dados é composto por quatro tabelas: USUARIO, CATEGORIA, LOCAL e OBJETO.
+- **USUARIO**(`id_usuario` PK, `nome`, `email`, `matricula`, `telefone`)
+- **LOCAL**(`id_local` PK, `nome`, `bloco`, `descricao`)
+- **OBJETO**(`id_objeto` PK, `nome`, `descricao`, `data_ocorrencia`, `status`, `id_usuario` FK, `id_local` FK)
 
-A tabela OBJETO representa a entidade central do sistema e contém três chaves estrangeiras responsáveis por estabelecer os relacionamentos com as demais tabelas.
+As chaves estrangeiras de OBJETO referenciam `USUARIO(id_usuario)` e `LOCAL(id_local)`. Os nomes de campos no SQL do brModelo podem diferir dos nomes simplificados adotados nos scripts PostgreSQL.
 
-**Esquema relacional:**
-
-- USUARIO(id_usuario PK, nome, email, matricula, telefone)
-- CATEGORIA(id_categoria PK, nome, descricao)
-- LOCAL(id_local PK, nome, bloco, descricao)
-- OBJETO(id_objeto PK, nome, descricao, data_ocorrencia, status, id_usuario FK, id_categoria FK, id_local FK)
+![Modelo lógico corrigido](APD2/Lógico_BD.png)
 
 ### 2. Primeira Forma Normal (1FN)
 
-A Primeira Forma Normal determina que cada atributo deve armazenar valores atômicos, evitando grupos repetitivos ou múltiplos valores em um mesmo campo.
-
-No modelo proposto, os atributos foram definidos para armazenar valores individuais. Por exemplo, cada objeto possui um único nome, uma data de ocorrência e um status.
-
-Dessa forma, considerando o preenchimento atômico dos campos, o modelo atende à 1FN.
+Cada atributo foi definido para armazenar um valor individual, sem listas ou grupos repetidos. Considerando o preenchimento atômico dos campos, o modelo atende à 1FN.
 
 ### 3. Segunda Forma Normal (2FN)
 
-A Segunda Forma Normal exige que o modelo esteja na 1FN e que os atributos não-chave não dependam apenas de parte de uma chave candidata composta.
-
-As quatro tabelas possuem chaves primárias simples, formadas por um único identificador.
-
-Considerando também que não foram definidas outras chaves candidatas compostas com dependências parciais, o modelo atende à 2FN.
+As tabelas possuem chaves primárias simples. Considerando as dependências funcionais definidas para o projeto, não há dependências parciais de chaves compostas; portanto, o modelo atende à 2FN.
 
 ### 4. Terceira Forma Normal (3FN)
 
-A Terceira Forma Normal busca eliminar dependências transitivas indevidas entre atributos.
-
-No modelo desenvolvido, os dados dos usuários, categorias e locais foram organizados em tabelas específicas, evitando sua repetição na tabela OBJETO.
-
-Assim, as informações descritivas dessas entidades permanecem relacionadas aos seus respectivos identificadores.
-
-Considerando as dependências funcionais previstas nas regras de negócio, não foram identificadas dependências transitivas que violem a 3FN.
+As informações dos usuários e locais são mantidas em tabelas próprias. A tabela OBJETO guarda apenas suas informações específicas e as referências aos respectivos registros, evitando repetir nome, e-mail, bloco e descrição do local em cada ocorrência. Sob as regras de negócio estabelecidas, não foram identificadas dependências transitivas que violem a 3FN.
 
 ### 5. Justificativa da normalização
 
-A organização da base de dados busca reduzir a redundância, melhorar a consistência das informações e evitar anomalias de inserção, atualização e exclusão.
-
-A separação das entidades também facilita a manutenção do banco e a implementação de consultas SQL utilizando relacionamentos entre tabelas.
+A separação entre USUARIO, LOCAL e OBJETO reduz redundâncias e anomalias de atualização, inserção e exclusão, além de facilitar consultas relacionais e a manutenção dos dados.
 
 ### 6. Conclusão da APD2
 
-A transformação do MER para o modelo lógico permitiu definir as tabelas, chaves primárias, chaves estrangeiras e relacionamentos necessários ao sistema.
+O modelo lógico traduz as entidades e os relacionamentos em tabelas, chaves primárias e estrangeiras. A análise das dependências funcionais previstas indica atendimento à 1FN, 2FN e 3FN.
 
-A análise de normalização indica que a estrutura proposta atende à 1FN, 2FN e 3FN, considerando as regras de negócio estabelecidas.
-
-O modelo servirá como base para a implementação física em um SGBD relacional durante a APD3.
+---
 
 ## APD3 — Implementação Física do Banco de Dados
 
 ### 1. Objetivo
 
-A terceira etapa do Projeto Integrador teve como objetivo implementar fisicamente a base de dados relacional desenvolvida nas etapas anteriores, utilizando um Sistema Gerenciador de Banco de Dados (SGBD).
+Implementar no PostgreSQL a estrutura relacional definida nas etapas anteriores, inserir registros fictícios e demonstrar a recuperação de informações com consultas SQL.
 
 ### 2. Tecnologias utilizadas
 
-Foi utilizado o PostgreSQL, disponibilizado pela plataforma Supabase, para criação e gerenciamento das tabelas e execução dos comandos SQL.
-
-O Visual Studio Code foi utilizado para organizar os scripts e a documentação, enquanto o GitHub foi utilizado para versionamento dos arquivos do projeto.
+O banco foi implementado em **PostgreSQL**, disponibilizado pelo **Supabase**. O Visual Studio Code foi utilizado na organização dos scripts e o GitHub no versionamento dos artefatos.
 
 ### 3. Implementação das tabelas
 
-Foram criadas quatro tabelas relacionadas:
+Foram implementadas as tabelas **usuario**, **local** e **objeto**. Cada tabela possui chave primária; `objeto` contém chaves estrangeiras para `usuario` e `local`. Foram previstas restrições como `NOT NULL`, `UNIQUE` e `CHECK` para preservar a integridade dos registros.
 
-- USUARIO: armazena os dados dos usuários responsáveis pelos registros.
-- CATEGORIA: armazena as classificações dos objetos.
-- LOCAL: armazena os locais de ocorrência.
-- OBJETO: armazena os objetos perdidos ou encontrados.
-
-As tabelas possuem chaves primárias e relacionamentos definidos por chaves estrangeiras, garantindo a integridade referencial.
-
-Também foram utilizadas restrições como NOT NULL, UNIQUE e CHECK para melhorar a consistência dos dados.
-
-O script de criação está disponível em `database/01_create_tables.sql`.
+Script: [`database/01_create_tables.sql`](../database/01_create_tables.sql).
 
 ### 4. Inserção de dados
 
-Foram inseridos registros fictícios nas quatro tabelas para permitir a execução de testes e consultas.
+Foram utilizados dados fictícios para testar os relacionamentos, incluindo usuários, locais e objetos nos estados PERDIDO, ENCONTRADO e DEVOLVIDO.
 
-Os dados incluem usuários, categorias, locais e objetos com diferentes situações, como PERDIDO, ENCONTRADO e DEVOLVIDO.
-
-O script está disponível em `database/02_insert_data.sql`.
+Script: [`database/02_insert_data.sql`](../database/02_insert_data.sql). O script de inserção deve ser utilizado na configuração de uma base nova, não repetido indiscriminadamente na base já populada.
 
 ### 5. Consultas SQL
 
-Foram elaboradas consultas para demonstrar a manipulação e recuperação de informações armazenadas no banco.
+As consultas demonstram:
 
-Entre os recursos utilizados estão:
+- `SELECT`, `WHERE` e `ORDER BY` para listagem, filtros e ordenação;
+- `INNER JOIN` e `LEFT JOIN` para relacionar objetos, usuários e locais;
+- `GROUP BY` e `COUNT` para contagem de objetos por local ou status;
+- subconsultas com `IN` e `EXISTS` para recuperação condicionada de registros.
 
-- SELECT e WHERE para consultas e filtros;
-- ORDER BY para ordenação;
-- INNER JOIN para relacionar registros;
-- LEFT JOIN para incluir registros sem correspondência;
-- GROUP BY e COUNT para agrupamento e contagem;
-- Subconsultas com IN, EXISTS e comparação de valores.
-
-As consultas estão organizadas em `database/03_queries.sql`.
+Script: [`database/03_queries.sql`](../database/03_queries.sql).
 
 ### 6. Evidências de execução
 
-Foram registradas capturas de tela dos resultados das consultas no SQL Editor do Supabase.
+As capturas abaixo devem corresponder à execução das consultas **atualizadas**, sem referências à tabela CATEGORIA.
 
-**Consulta 5 — Relacionamento entre objetos, categorias e locais**
+**Consulta 5 — Objetos, usuários e locais**
 
 ![Consulta 5](APD3/evidencias/consulta5.png)
 
-**Consulta 6 — Quantidade de objetos por categoria**
+**Consulta 6 — Quantidade de objetos por local**
 
 ![Consulta 6](APD3/evidencias/consulta6.png)
 
-**Consulta 8 — Subconsulta para objetos da Biblioteca**
+**Consulta 8 — Subconsulta de objetos da Biblioteca**
 
 ![Consulta 8](APD3/evidencias/consulta8.png)
 
 ### 7. Resultados
 
-A execução das consultas permitiu verificar a recuperação de informações de diferentes tabelas, demonstrando o funcionamento dos relacionamentos estabelecidos no modelo lógico.
-
-Os resultados também demonstraram a possibilidade de realizar filtros, agrupamentos e subconsultas utilizando SQL.
+As consultas realizadas demonstraram a recuperação de objetos vinculados a usuários e locais. Após a revisão do modelo, a estrutura do banco foi adaptada para retirar a entidade CATEGORIA e sua referência na tabela OBJETO, preservando os registros de teste das demais tabelas.
 
 ### 8. Conclusão
 
-A implementação física do banco de dados permitiu transformar o modelo lógico em uma estrutura funcional no PostgreSQL.
+A implementação física disponibiliza uma base relacional para consultas e operações CRUD. A próxima etapa será desenvolver o MVP web integrado ao PostgreSQL/Supabase, com atenção às políticas de acesso do banco.
 
-As tabelas, os relacionamentos e as consultas desenvolvidas constituem a base para a próxima etapa do projeto, que será a integração com uma aplicação web contendo funcionalidades CRUD.
+---
 
+## APD4 — Próxima etapa
 
-**APD4:** desenvolvimento de um MVP web integrado ao banco de dados, com funcionalidades CRUD e consultas.
+Implementar a aplicação web com funcionalidades de cadastro, consulta, atualização e exclusão, integrada às tabelas do projeto. Esta etapa ainda não está documentada como concluída.
