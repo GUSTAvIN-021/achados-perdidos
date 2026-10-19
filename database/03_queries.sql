@@ -2,67 +2,59 @@
 -- APD3 - Consultas SQL
 -- Sistema de Achados e Perdidos
 
--- CONSULTA 1: Listar todos os objetos
+-- 1. Listar todos os objetos
 SELECT * FROM objeto;
 
--- CONSULTA 2: Objetos perdidos
+-- 2. Listar objetos perdidos
 SELECT nome, descricao, data_ocorrencia
 FROM objeto
 WHERE status = 'PERDIDO';
 
--- CONSULTA 3: Objetos por data (mais recentes primeiro)
+-- 3. Ordenar objetos por data
 SELECT nome, data_ocorrencia, status
 FROM objeto
 ORDER BY data_ocorrencia DESC;
 
--- CONSULTA 4: Objetos e seus usuarios
-SELECT
-    o.nome AS objeto,
-    u.nome AS responsavel
+-- 4. Objetos e usuarios
+SELECT o.nome AS objeto, u.nome AS usuario
 FROM objeto o
 INNER JOIN usuario u
-    ON o.id_usuario = u.id_usuario;
+ON o.id_usuario = u.id_usuario;
 
--- CONSULTA 5: Objetos, categorias e locais
+-- 5. Objetos, usuarios e locais
 SELECT
     o.nome AS objeto,
-    c.nome AS categoria,
+    u.nome AS usuario,
     l.nome AS local,
     o.status
 FROM objeto o
-INNER JOIN categoria c
-    ON o.id_categoria = c.id_categoria
-INNER JOIN local l
-    ON o.id_local = l.id_local;
+INNER JOIN usuario u ON o.id_usuario = u.id_usuario
+INNER JOIN local l ON o.id_local = l.id_local;
 
--- CONSULTA 6: Quantidade de objetos por categoria
+-- 6. Quantidade de objetos por local
 SELECT
-    c.nome AS categoria,
+    l.nome AS local,
     COUNT(o.id_objeto) AS quantidade
-FROM categoria c
-LEFT JOIN objeto o
-    ON c.id_categoria = o.id_categoria
-GROUP BY c.id_categoria, c.nome
+FROM local l
+LEFT JOIN objeto o ON l.id_local = o.id_local
+GROUP BY l.id_local, l.nome
 ORDER BY quantidade DESC;
 
--- CONSULTA 7: Quantidade de objetos por status
-SELECT
-    status,
-    COUNT(*) AS quantidade
+-- 7. Quantidade de objetos por status
+SELECT status, COUNT(*) AS quantidade
 FROM objeto
-GROUP BY status
-ORDER BY quantidade DESC;
+GROUP BY status;
 
--- CONSULTA 8: Subconsulta - Objetos da Biblioteca
+-- 8. Subconsulta: objetos da Biblioteca
 SELECT nome, status
 FROM objeto
-WHERE id_local = (
+WHERE id_local IN (
     SELECT id_local
     FROM local
     WHERE nome = 'Biblioteca'
 );
 
--- CONSULTA 9: Subconsulta - Usuarios que cadastraram objetos
+-- 9. Usuarios que cadastraram objetos
 SELECT nome, email
 FROM usuario
 WHERE id_usuario IN (
@@ -70,11 +62,11 @@ WHERE id_usuario IN (
     FROM objeto
 );
 
--- CONSULTA 10: Subconsulta - Categorias com objetos
+-- 10. Locais com objetos registrados
 SELECT nome
-FROM categoria
+FROM local l
 WHERE EXISTS (
     SELECT 1
-    FROM objeto
-    WHERE objeto.id_categoria = categoria.id_categoria
+    FROM objeto o
+    WHERE o.id_local = l.id_local
 );
